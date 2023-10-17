@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ubenwa_cynthia/presentation/utils/onboarding_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
+import 'package:ubenwa_cynthia/utils/app_routes.dart';
 import 'package:ubenwa_cynthia/utils/theme/theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(milliseconds: 500),
       () {
-        //callback
+        Navigator.pushNamed(context, AppRoutes.onboardingScreen);
       },
     );
   }
