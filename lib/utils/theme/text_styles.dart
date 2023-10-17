@@ -9,8 +9,8 @@ class AppTextStyles {
   );
 
   static const headingBold = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w700,
+    fontSize: 26,
+    fontWeight: FontWeight.w600,
     fontFamily: AppFont.inter,
     color: _Colors.black,
   );
@@ -38,7 +38,7 @@ class AppTextStyles {
 
   static const bodyMedium = TextStyle(
     fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
     fontFamily: AppFont.inter,
     color: _Colors.black,
   );

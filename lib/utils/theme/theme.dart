@@ -1,4 +1,5 @@
 library theme;
+
 import 'package:flutter/material.dart';
 import 'colors_theme_extension.dart';
 part 'app_colors.dart';
@@ -10,11 +11,13 @@ final ThemeData appTheme = _buildLightTheme();
 ThemeData _buildLightTheme() {
   const Color primaryColor = _Colors.blue;
   const Color secondaryColor = _Colors.yellow;
+  const Color tertiaryColor = _Colors.lightBlack;
 
   final ColorScheme colorScheme = const ColorScheme.light().copyWith(
     primary: primaryColor,
     secondary: secondaryColor,
     error: Colors.red,
+    tertiary: tertiaryColor,
   );
   final themeData = ThemeData(
     useMaterial3: true,
@@ -79,6 +82,7 @@ ThemeData _buildLightTheme() {
         black: _Colors.black,
         yellow: _Colors.yellow,
         white: _Colors.white,
+        lightBlack: _Colors.lightBlack,
       ),
     ],
   );
