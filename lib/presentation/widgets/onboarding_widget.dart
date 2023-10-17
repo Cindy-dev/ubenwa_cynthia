@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:ubenwa_cynthia/presentation/widgets/onboarding_dot_indicator.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 import 'package:ubenwa_cynthia/utils/theme/theme.dart';
 
 class OnboardingWidget extends StatelessWidget {
   final String title;
   final String subtitle;
+  final int currentPosition;
   const OnboardingWidget(
-      {Key? key, required this.title, required this.subtitle})
+      {Key? key,
+      required this.title,
+      required this.subtitle,
+      required this.currentPosition})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 63, vertical: 55),
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 55),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Spacer(),
+          const Spacer(flex: 2,),
+          OnboardingDotIndicator(currentPosition: currentPosition),
+          SizedBox(height: context.deviceHeight() / 29),
           Text(
             title,
             textAlign: TextAlign.center,
