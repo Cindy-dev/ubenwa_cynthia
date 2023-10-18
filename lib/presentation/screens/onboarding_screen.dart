@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 0),
+            padding: const EdgeInsets.only(top: 0),
             child: PageView(
               controller: _pageController,
               onPageChanged: _updatePosition,
@@ -94,6 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             left: 30,
             right: 30,
             child: OnboardingAnimatedImage(
+              currentPosition: _currentPosition,
               pageController: _pageController,
               image: getImage(_currentPosition),
             ),

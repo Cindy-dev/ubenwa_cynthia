@@ -6,8 +6,12 @@ import 'package:ubenwa_cynthia/utils/app_extension.dart';
 class OnboardingAnimatedImage extends StatefulWidget {
   final PageController pageController;
   final String image;
+  final int currentPosition;
   const OnboardingAnimatedImage(
-      {Key? key, required this.image, required this.pageController})
+      {Key? key,
+      required this.image,
+      required this.pageController,
+      required this.currentPosition})
       : super(key: key);
 
   @override
@@ -29,6 +33,10 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
     animation =
         Tween<double>(begin: 0, end: pi / 2).animate(animationController);
     slideAnimation = Tween<double>(begin: 0, end: 100);
+
+    widget.pageController.addListener(() {
+      animationController.forward(from: 0);
+    });
     super.initState();
   }
 
@@ -55,14 +63,20 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
   Widget build(BuildContext context) {
     return GestureDetector(
       onHorizontalDragUpdate: (direction) {
-        if (direction.delta.dx < 0) {
+        if (direction.delta.dx < 0 && widget.currentPosition < 3) {
           // Right Swipe
           _rotateChild();
           isSwiping = true;
-        } else if (direction.delta.dx > 0) {
+          widget.pageController.nextPage(
+              duration: const Duration(milliseconds: 10),
+              curve: Curves.easeInOut);
+        } else if (direction.delta.dx > 0 && widget.currentPosition > 0) {
           //Left Swipe
           _rotateChild();
           isSwiping = true;
+          widget.pageController.previousPage(
+              duration: const Duration(milliseconds: 10),
+              curve: Curves.easeInOut);
         }
       },
       onHorizontalDragEnd: (direction) {
@@ -132,8 +146,9 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
                       child: Transform.rotate(
                         angle: -animation.value,
                         child: CircleAvatar(
-                            radius: 30,
-                            child: Image.asset(OnboardingStrings.baby1)),
+                          radius: 30,
+                          child: Image.asset(OnboardingStrings.baby1),
+                        ),
                       ),
                     ),
                   ],
