@@ -4,10 +4,10 @@ import 'package:ubenwa_cynthia/presentation/utils/onboarding_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 
 class OnboardingAnimatedImage extends StatefulWidget {
+  final PageController pageController;
   final String image;
-  bool pageChanged;
-  OnboardingAnimatedImage(
-      {Key? key, required this.image, this.pageChanged = false})
+  const OnboardingAnimatedImage(
+      {Key? key, required this.image, required this.pageController})
       : super(key: key);
 
   @override
@@ -72,17 +72,15 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
       child: Stack(
         children: [
           Positioned(
-            top: 0,
             right: 0,
             left: 0,
-            bottom: 0,
             child: Image.asset(widget.image),
           ),
           AnimatedBuilder(
             animation: animation,
             builder: (BuildContext context, Widget? child) {
-              final extent = bounce2(animationController.value,
-                  start: 0, mid: 50, end: 0);
+              final extent =
+                  bounce2(animationController.value, start: 0, mid: 50, end: 0);
               return Transform.rotate(
                 angle: animation.value,
                 child: Stack(
