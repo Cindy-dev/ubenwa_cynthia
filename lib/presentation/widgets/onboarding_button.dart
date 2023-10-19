@@ -10,6 +10,13 @@ class OnboardingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
+      style: TextButton.styleFrom(
+        backgroundColor: context.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 140),
+      ),
       onPressed: onPressed,
       child: Text(
         title,

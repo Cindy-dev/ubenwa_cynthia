@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ubenwa_cynthia/presentation/widgets/onboarding_button.dart';
 import 'package:ubenwa_cynthia/presentation/widgets/onboarding_dot_indicator.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
+import 'package:ubenwa_cynthia/utils/app_routes.dart';
 import 'package:ubenwa_cynthia/utils/theme/theme.dart';
 
 class OnboardingWidget extends StatelessWidget {
@@ -48,7 +50,17 @@ class OnboardingWidget extends StatelessWidget {
               style: AppTextStyles.small.copyWith(fontSize: 14),
             ),
           ),
-          const Spacer(),
+          if (currentPosition != 3) const Spacer(),
+          if (currentPosition == 3)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: OnboardingButton(
+                title: "Get Started",
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.homeScreen);
+                },
+              ),
+            ),
           currentPosition == 0
               ? Align(
                   alignment: Alignment.centerRight,
