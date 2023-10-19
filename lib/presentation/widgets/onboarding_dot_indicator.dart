@@ -8,6 +8,14 @@ class OnboardingDotIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color indicatorColor() {
+      if (currentPosition == 0 || currentPosition == 2) {
+        return context.themeData.colorScheme.secondary;
+      } else {
+        return context.primaryColor;
+      }
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
@@ -20,7 +28,7 @@ class OnboardingDotIndicator extends StatelessWidget {
                   height: 8,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    color: context.themeData.colorScheme.secondary,
+                    color: indicatorColor(),
                   ),
                 )
               : Container(
