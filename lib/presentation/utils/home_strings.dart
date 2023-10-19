@@ -5,4 +5,5 @@ class HomeStrings {
   static String predictCry = "assets/images/predict_cry.png";
   static String sun = "assets/images/sun-fog.png";
   static String wifi = "assets/images/wifi-square.png";
+  static String bell = "assets/images/bell.png";
 }

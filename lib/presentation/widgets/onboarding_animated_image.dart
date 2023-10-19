@@ -23,21 +23,31 @@ class OnboardingAnimatedImage extends StatefulWidget {
 class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
     with TickerProviderStateMixin {
   late AnimationController animationController;
+  late AnimationController scalingAnimationController;
   late Animation<double> animation;
   late Tween<double> slideAnimation;
-  bool isSwiping = false;
+  late double imageOpacity;
 
   @override
   void initState() {
+    imageOpacity = 1;
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
     );
+    //handles scaling of babies during rotation
+    scalingAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
     animation =
-        Tween<double>(begin: 0, end: pi/2).animate(animationController);
-
+        Tween<double>(begin: 0, end: pi * 2).animate(animationController);
     widget.pageController.addListener(() {
-      animationController.forward(from: 0);
+      if (widget.pageController.page! > widget.currentPosition) {
+        _rotateChild();
+      } else {
+        _rotateChild(forward: false);
+      }
     });
     super.initState();
   }
@@ -46,12 +56,23 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
   void dispose() {
     widget.pageController.dispose();
     animationController.dispose();
+    scalingAnimationController.dispose();
     super.dispose();
   }
 
-  void _rotateChild() {
+  //saves the next stop of the animation controller
+  double animationTarget = 0.0;
+
+  void _rotateChild({bool forward = true}) {
     setState(() {
-      animationController.forward(from: 0);
+      if (forward) {
+        animationTarget = animationTarget + 0.25;
+      } else {
+        animationTarget = animationTarget - 0.25;
+      }
+      imageOpacity = 0.5;
+      animationController.animateTo(animationTarget);
+      scalingAnimationController.forward(from: 0);
     });
   }
 
@@ -69,103 +90,131 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
       onHorizontalDragUpdate: (direction) {
         if (direction.delta.dx < 0) {
           // Right Swipe
-          _rotateChild();
-          isSwiping = true;
           widget.pageController.nextPage(
               duration: const Duration(milliseconds: 10),
               curve: Curves.easeInOut);
-        } else if (direction.delta.dx > 0 ) {
+        } else if (direction.delta.dx > 0) {
           //Left Swipe
-          _rotateChild();
-          isSwiping = true;
           widget.pageController.previousPage(
               duration: const Duration(milliseconds: 10),
               curve: Curves.easeInOut);
         }
-      },
-      onHorizontalDragEnd: (direction) {
-        // Stop rotating the image when the user stops swiping
-        isSwiping = false;
       },
       child: Stack(
         children: [
           Positioned(
             right: 0,
             left: 0,
-            child: Image.asset(image),
+            child: AnimatedOpacity(
+              curve: Curves.fastOutSlowIn,
+              opacity: imageOpacity,
+              duration: const Duration(milliseconds: 300),
+              child: Image.asset(image),
+              onEnd: () {
+                setState(() {
+                  imageOpacity = 1.0;
+                });
+              },
+            ),
           ),
           AnimatedBuilder(
-            animation: animation,
+            animation: animationController,
             builder: (context, child) {
-              final extent =
-                  bounce2(animationController.value, start: 0, mid: 50, end: 0);
               return Transform.rotate(
                 angle: animation.value,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: context.deviceHeight() / 2.5,
-                    ),
-                    //using negative to ensure all images are rotating in the right form
-                    Positioned(
-                      //top baby
-                      left: 0,
-                      right: 0,
-                      top: extent,
-                      child: Transform.rotate(
-                        angle: -animation.value,
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: context.themeData.colorScheme.secondary,
-                          child: Image.asset(OnboardingStrings.analytical),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      //right baby
-                      right: extent,
-                      top: 150,
-                      child: Transform.rotate(
-                        angle: -animation.value,
-                        child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: context.primaryColor,
-                            child: Image.asset(OnboardingStrings.cry)),
-                      ),
-                    ),
-                    Positioned(
-                      //left baby
-                      top: 150,
-                      left: extent,
-                      child: Transform.rotate(
-                        angle: -animation.value,
-                        child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor: context.primaryColor,
-                            child: Image.asset(OnboardingStrings.happy)),
-                      ),
-                    ),
-                    Positioned(
-                      //bottom baby
-                      bottom: extent,
-                      right: 0,
-                      left: 0,
-                      child: Transform.rotate(
-                        angle: -animation.value,
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundColor: context.themeData.colorScheme.secondary,
-                          child: Image.asset(OnboardingStrings.baby1),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: AnimatedBuilder(
+                    animation: scalingAnimationController,
+                    builder: (context, ch) {
+                      final extent = bounce2(scalingAnimationController.value,
+                          start: 0, mid: 50, end: 0);
+                      return Stack(
+                        children: [
+                          Container(
+                            height: context.deviceHeight() / 2.5,
+                          ),
+                          //using negative to ensure all images are rotating in the right form
+                          Positioned(
+                            //top baby
+                            left: 0,
+                            right: 0,
+                            top: extent,
+                            child: Transform.rotate(
+                              angle: -animation.value,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: colorChange(
+                                  2,
+                                  context.themeData.colorScheme.secondary,
+                                ),
+                                child:
+                                    Image.asset(OnboardingStrings.analytical),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            //right baby
+                            right: extent,
+                            top: 150,
+                            child: Transform.rotate(
+                              angle: -animation.value,
+                              child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: colorChange(
+                                    1,
+                                    context.primaryColor,
+                                  ),
+                                  child: Image.asset(OnboardingStrings.cry)),
+                            ),
+                          ),
+                          Positioned(
+                            //left baby
+                            top: 150,
+                            left: extent,
+                            child: Transform.rotate(
+                              angle: -animation.value,
+                              child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: colorChange(
+                                    3,
+                                    context.primaryColor,
+                                  ),
+                                  child: Image.asset(OnboardingStrings.happy)),
+                            ),
+                          ),
+                          Positioned(
+                            //bottom baby
+                            bottom: extent,
+                            right: 0,
+                            left: 0,
+                            child: Transform.rotate(
+                              angle: -animation.value,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: colorChange(
+                                  0,
+                                  context.themeData.colorScheme.secondary,
+                                ),
+                                child: Image.asset(OnboardingStrings.baby1),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
               );
             },
           ),
         ],
       ),
     );
+  }
+
+  Color colorChange(int babyPosition, Color babyColor) {
+    int index = widget.currentPosition;
+    if (index == babyPosition) {
+      return babyColor;
+    } else {
+      return babyColor.withOpacity(0.2);
+    }
   }
 }

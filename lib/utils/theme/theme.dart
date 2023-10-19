@@ -69,7 +69,6 @@ ThemeData _buildLightTheme() {
       headlineLarge: AppTextStyles.headingBold,
       headlineMedium: AppTextStyles.headingSemiBold,
       titleLarge: AppTextStyles.headingSemiBold,
-
       titleMedium: AppTextStyles.bodySemiBold,
       bodyMedium: AppTextStyles.bodyMedium,
       bodyLarge: AppTextStyles.bodySemiBold,
