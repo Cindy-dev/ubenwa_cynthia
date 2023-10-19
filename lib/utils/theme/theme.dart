@@ -16,7 +16,7 @@ ThemeData _buildLightTheme() {
   final ColorScheme colorScheme = const ColorScheme.light().copyWith(
     primary: primaryColor,
     secondary: secondaryColor,
-    error: Colors.red,
+    error: _Colors.red,
     tertiary: tertiaryColor,
   );
   final themeData = ThemeData(
@@ -68,10 +68,8 @@ ThemeData _buildLightTheme() {
       displayLarge: AppTextStyles.displayLarge,
       headlineLarge: AppTextStyles.headingBold,
       headlineMedium: AppTextStyles.headingSemiBold,
-      titleLarge: AppTextStyles.headingSemiBold,
-      titleMedium: AppTextStyles.bodySemiBold,
-      bodyMedium: AppTextStyles.bodyMedium,
-      bodyLarge: AppTextStyles.bodySemiBold,
+      titleLarge: AppTextStyles.bodySemiBold,
+      titleMedium: AppTextStyles.bodyMedium,
       bodySmall: AppTextStyles.subtitle1,
       labelSmall: AppTextStyles.small,
     ),
@@ -83,6 +81,9 @@ ThemeData _buildLightTheme() {
         yellow: _Colors.yellow,
         white: _Colors.white,
         lightBlack: _Colors.lightBlack,
+        red:  _Colors.red,
+        purple: _Colors.purple,
+        green: _Colors.green,
       ),
     ],
   );

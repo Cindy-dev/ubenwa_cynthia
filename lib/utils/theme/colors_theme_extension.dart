@@ -6,6 +6,9 @@ class ColorThemeExt extends ThemeExtension<ColorThemeExt> {
   final Color lightBlack;
   final Color blue;
   final Color yellow;
+  final Color purple;
+  final Color red;
+  final Color green;
 
   ColorThemeExt({
     required this.blue,
@@ -13,6 +16,9 @@ class ColorThemeExt extends ThemeExtension<ColorThemeExt> {
     required this.lightBlack,
     required this.yellow,
     required this.white,
+    required this.purple,
+    required this.red,
+    required this.green,
   });
   @override
   ThemeExtension<ColorThemeExt> copyWith({
@@ -21,13 +27,20 @@ class ColorThemeExt extends ThemeExtension<ColorThemeExt> {
     Color? black,
     Color? lightBlack,
     Color? yellow,
+    Color? purple,
+    Color? red,
+    Color? green,
   }) {
     return ColorThemeExt(
-        black: black ?? this.black,
-        lightBlack: lightBlack ?? this.lightBlack,
-        yellow: yellow ?? this.yellow,
-        white: white ?? this.white,
-        blue: blue ?? this.blue);
+      black: black ?? this.black,
+      lightBlack: lightBlack ?? this.lightBlack,
+      yellow: yellow ?? this.yellow,
+      white: white ?? this.white,
+      purple: purple ?? this.purple,
+      red: red ?? this.red,
+      blue: blue ?? this.blue,
+      green: green ?? this.green,
+    );
   }
 
   @override

@@ -30,14 +30,14 @@ class AppTextStyles {
   );
 
   static const bodySemiBold = TextStyle(
-    fontSize: 12,
+    fontSize: 16,
     fontWeight: FontWeight.w500,
     fontFamily: AppFont.inter,
     color: _Colors.black,
   );
 
   static const bodyMedium = TextStyle(
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: FontWeight.w500,
     fontFamily: AppFont.inter,
     color: _Colors.black,
