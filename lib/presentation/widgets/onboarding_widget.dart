@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ubenwa_cynthia/presentation/widgets/onboarding_animated_image.dart';
 import 'package:ubenwa_cynthia/presentation/widgets/onboarding_dot_indicator.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 import 'package:ubenwa_cynthia/utils/theme/theme.dart';
@@ -38,7 +37,7 @@ class OnboardingWidget extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: AppTextStyles.displayLarge,
+            style: context.textTheme.displayLarge,
           ),
           const SizedBox(height: 13),
           Padding(
@@ -57,8 +56,8 @@ class OnboardingWidget extends StatelessWidget {
                     onPressed: onNext,
                     child: Text(
                       "Show me How",
-                      style: AppTextStyles.headingBold
-                          .copyWith(color: context.primaryColor, fontSize: 16),
+                      style: context.textTheme.headlineLarge
+                          ?.copyWith(color: context.primaryColor, fontSize: 16),
                     ),
                   ),
                 )
@@ -69,7 +68,7 @@ class OnboardingWidget extends StatelessWidget {
                       onPressed: onPrevious,
                       child: Text(
                         "Previous",
-                        style: AppTextStyles.headingBold.copyWith(
+                        style: context.textTheme.headlineLarge?.copyWith(
                           color: context.themeData.colorScheme.tertiary
                               .withOpacity(0.5),
                           fontSize: 16,
@@ -81,7 +80,7 @@ class OnboardingWidget extends StatelessWidget {
                         onPressed: onNext,
                         child: Text(
                           "Next",
-                          style: AppTextStyles.headingBold.copyWith(
+                          style: context.textTheme.headlineLarge?.copyWith(
                             color: context.primaryColor,
                             fontSize: 16,
                           ),

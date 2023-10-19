@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:ubenwa_cynthia/presentation/utils/get_image_helper.dart';
 import 'package:ubenwa_cynthia/presentation/utils/onboarding_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 
@@ -28,11 +29,12 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
 
   @override
   void initState() {
-    animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
     animation =
-        Tween<double>(begin: 0, end: pi / 2).animate(animationController);
-    slideAnimation = Tween<double>(begin: 0, end: 100);
+        Tween<double>(begin: 0, end: pi/2).animate(animationController);
 
     widget.pageController.addListener(() {
       animationController.forward(from: 0);
@@ -42,6 +44,7 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
 
   @override
   void dispose() {
+    widget.pageController.dispose();
     animationController.dispose();
     super.dispose();
   }
@@ -61,16 +64,17 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
 
   @override
   Widget build(BuildContext context) {
+    final image = getImage(widget.currentPosition);
     return GestureDetector(
       onHorizontalDragUpdate: (direction) {
-        if (direction.delta.dx < 0 && widget.currentPosition < 3) {
+        if (direction.delta.dx < 0) {
           // Right Swipe
           _rotateChild();
           isSwiping = true;
           widget.pageController.nextPage(
               duration: const Duration(milliseconds: 10),
               curve: Curves.easeInOut);
-        } else if (direction.delta.dx > 0 && widget.currentPosition > 0) {
+        } else if (direction.delta.dx > 0 ) {
           //Left Swipe
           _rotateChild();
           isSwiping = true;
@@ -88,11 +92,11 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
           Positioned(
             right: 0,
             left: 0,
-            child: Image.asset(widget.image),
+            child: Image.asset(image),
           ),
           AnimatedBuilder(
             animation: animation,
-            builder: (BuildContext context, Widget? child) {
+            builder: (context, child) {
               final extent =
                   bounce2(animationController.value, start: 0, mid: 50, end: 0);
               return Transform.rotate(
@@ -112,6 +116,7 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
                         angle: -animation.value,
                         child: CircleAvatar(
                           radius: 30,
+                          backgroundColor: context.themeData.colorScheme.secondary,
                           child: Image.asset(OnboardingStrings.analytical),
                         ),
                       ),
@@ -124,6 +129,7 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
                         angle: -animation.value,
                         child: CircleAvatar(
                             radius: 30,
+                            backgroundColor: context.primaryColor,
                             child: Image.asset(OnboardingStrings.cry)),
                       ),
                     ),
@@ -135,6 +141,7 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
                         angle: -animation.value,
                         child: CircleAvatar(
                             radius: 30,
+                            backgroundColor: context.primaryColor,
                             child: Image.asset(OnboardingStrings.happy)),
                       ),
                     ),
@@ -147,6 +154,7 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
                         angle: -animation.value,
                         child: CircleAvatar(
                           radius: 30,
+                          backgroundColor: context.themeData.colorScheme.secondary,
                           child: Image.asset(OnboardingStrings.baby1),
                         ),
                       ),

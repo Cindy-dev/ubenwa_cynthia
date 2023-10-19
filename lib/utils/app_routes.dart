@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ubenwa_cynthia/presentation/screens/home_screen.dart';
 import 'package:ubenwa_cynthia/presentation/screens/onboarding_screen.dart';
 import '../presentation/screens/splash_screen.dart';
 
 class AppRoutes {
   static const String splashScreen = '/splash';
   static const String onboardingScreen = '/onboarding';
+  static const String homeScreen = '/home';
 
   static Map<String, Widget Function(BuildContext)> routes = {};
 
@@ -19,6 +21,10 @@ class AppRoutes {
       case onboardingScreen:
         return CupertinoPageRoute(
           builder: (context) => const OnboardingScreen(),
+        );
+        case homeScreen:
+        return CupertinoPageRoute(
+          builder: (context) => const HomeScreen(),
         );
       // Default Route is error route
       default:

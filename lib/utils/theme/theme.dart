@@ -65,10 +65,11 @@ ThemeData _buildLightTheme() {
       surfaceTintColor: _Colors.white,
     ),
     textTheme: const TextTheme(
-      displayLarge: AppTextStyles.headingBold,
-      titleLarge: AppTextStyles.headingSemiBold,
+      displayLarge: AppTextStyles.displayLarge,
       headlineLarge: AppTextStyles.headingBold,
       headlineMedium: AppTextStyles.headingSemiBold,
+      titleLarge: AppTextStyles.headingSemiBold,
+
       titleMedium: AppTextStyles.bodySemiBold,
       bodyMedium: AppTextStyles.bodyMedium,
       bodyLarge: AppTextStyles.bodySemiBold,
