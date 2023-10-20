@@ -57,7 +57,7 @@ class OnboardingWidget extends StatelessWidget {
               child: OnboardingButton(
                 title: "Get Started",
                 onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.homeScreen);
+                  Navigator.pushNamed(context, AppRoutes.milkSplashScreen);
                 },
               ),
             ),
