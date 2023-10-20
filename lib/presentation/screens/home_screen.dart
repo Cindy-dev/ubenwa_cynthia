@@ -57,7 +57,12 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const CircleAvatar(),
+                        CircleAvatar(
+                          backgroundColor: context
+                              .themeData.colorScheme.secondary
+                              .withOpacity(0.5),
+                          child: Image.asset(HomeStrings.star),
+                        ),
                         const SizedBox(
                           width: 7,
                         ),
@@ -117,8 +122,8 @@ class HomeScreen extends StatelessWidget {
                               context.themeData.cardColor.withOpacity(0.71)),
                       child: Text(
                         "Set Alarm",
-                        style: context.textTheme.titleMedium
-                            ?.copyWith(color: context.primaryColor, fontSize: 10),
+                        style: context.textTheme.titleMedium?.copyWith(
+                            color: context.primaryColor, fontSize: 10),
                       ),
                     ),
                     const SizedBox(
