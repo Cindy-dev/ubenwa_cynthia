@@ -8,6 +8,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  calendar_timeline:
+    git:
+      url: https://github.com/Cindy-dev/calendar_timeline
+      ref: cindy
   cupertino_icons: ^1.0.2
 
 dev_dependencies:

@@ -1,3 +1,4 @@
+import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:ubenwa_cynthia/presentation/utils/home_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
@@ -25,6 +26,21 @@ class HomeScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
+          CalendarTimeline(
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2019, 1, 15),
+            lastDate: DateTime(2090, 1, 15),
+            onDateSelected: (date) {},
+            leftMargin: 20,
+            monthColor: Colors.blueGrey,
+            dayTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.w700,
+            ),
+            locale: 'en_ISO',
+            activeBackgroundDayColor: const Color(0xff4476F6),
+          ),
           const OverviewRowWidget(),
           Padding(
             padding: const EdgeInsets.only(top: 26, bottom: 14, left: 25),

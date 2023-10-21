@@ -16,7 +16,6 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
   late AnimationController _controller;
   late Animation<double> dropPosition;
 
-
   @override
   void initState() {
     super.initState();
@@ -44,12 +43,10 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
     Navigator.of(context).push(
       FadeRouteBuilder(
         Image.asset(MilkSplashStrings.splash),
-        page:  const HomeScreen(),
+        page: const HomeScreen(),
       ),
     );
   }
-
-
 
   @override
   void didChangeDependencies() {
@@ -61,7 +58,7 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
 
   @override
   void dispose() {
-_controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -111,9 +108,7 @@ class FadeRouteBuilder<T> extends PageRouteBuilder<T> {
       : super(
           pageBuilder: (context, animation1, animation2) => page,
           transitionsBuilder: (context, animation1, animation2, child) {
-            return FadeTransition(
-                opacity: animation1,
-                child:  child);
+            return FadeTransition(opacity: animation1, child: child);
             //Image.asset(MilkSplashStrings.splash)
           },
         );
