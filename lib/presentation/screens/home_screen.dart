@@ -1,6 +1,7 @@
 import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:ubenwa_cynthia/presentation/utils/home_strings.dart';
+import 'package:ubenwa_cynthia/presentation/widgets/alarm_sheet.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 import '../widgets/overview_row_widget.dart';
 
@@ -128,7 +129,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        alarmSheet(context);
+                      },
                       style: ElevatedButton.styleFrom(
                           elevation: 4,
                           padding: const EdgeInsets.symmetric(horizontal: 27),
