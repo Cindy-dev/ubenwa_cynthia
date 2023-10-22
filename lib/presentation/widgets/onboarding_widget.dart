@@ -6,18 +6,16 @@ import 'package:ubenwa_cynthia/utils/app_routes.dart';
 import 'package:ubenwa_cynthia/utils/theme/theme.dart';
 
 class OnboardingWidget extends StatelessWidget {
+  final PageController pageController;
   final String title;
   final String subtitle;
   final int currentPosition;
-  VoidCallback? onNext;
-  VoidCallback? onPrevious;
   OnboardingWidget({
     Key? key,
     required this.title,
     required this.subtitle,
     required this.currentPosition,
-    this.onNext,
-    this.onPrevious,
+    required this.pageController,
   }) : super(key: key);
 
   @override
@@ -65,7 +63,11 @@ class OnboardingWidget extends StatelessWidget {
               ? Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: onNext,
+                    onPressed: () {
+                      pageController.nextPage(
+                          duration: const Duration(milliseconds: 10),
+                          curve: Curves.easeInOut);
+                    },
                     child: Text(
                       "Show me How",
                       style: context.textTheme.headlineLarge
@@ -77,7 +79,11 @@ class OnboardingWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                      onPressed: onPrevious,
+                      onPressed: () {
+                        pageController.previousPage(
+                            duration: const Duration(milliseconds: 10),
+                            curve: Curves.easeInOut);
+                      },
                       child: Text(
                         "Previous",
                         style: context.textTheme.headlineLarge?.copyWith(
@@ -89,7 +95,11 @@ class OnboardingWidget extends StatelessWidget {
                     ),
                     if (currentPosition != 3)
                       TextButton(
-                        onPressed: onNext,
+                        onPressed: () {
+                          pageController.nextPage(
+                              duration: const Duration(milliseconds: 10),
+                              curve: Curves.easeInOut);
+                        },
                         child: Text(
                           "Next",
                           style: context.textTheme.headlineLarge?.copyWith(

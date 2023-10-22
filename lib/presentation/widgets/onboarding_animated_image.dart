@@ -3,16 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:ubenwa_cynthia/presentation/utils/get_image_helper.dart';
 import 'package:ubenwa_cynthia/presentation/utils/onboarding_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
+import 'onboarding_baby_image_widget.dart';
 
 class OnboardingAnimatedImage extends StatefulWidget {
-  final PageController pageController;
-  final String image;
+  final AnimationController scalingAnimationController;
+  final AnimationController animationController;
+  final Animation<double> animation;
   final int currentPosition;
-  const OnboardingAnimatedImage(
+  double imageOpacity;
+
+  OnboardingAnimatedImage(
       {Key? key,
-      required this.image,
-      required this.pageController,
-      required this.currentPosition})
+      required this.scalingAnimationController,
+      required this.animationController,
+      required this.animation,
+      required this.currentPosition,
+      required this.imageOpacity})
       : super(key: key);
 
   @override
@@ -20,63 +26,8 @@ class OnboardingAnimatedImage extends StatefulWidget {
       _OnboardingAnimatedImageState();
 }
 
-class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
-    with TickerProviderStateMixin {
-  late AnimationController animationController;
-  late AnimationController scalingAnimationController;
-  late Animation<double> animation;
-  late Tween<double> slideAnimation;
-  late double imageOpacity;
-
-  @override
-  void initState() {
-    imageOpacity = 1;
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-    //handles scaling of babies during rotation
-    scalingAnimationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-    );
-    animation =
-        Tween<double>(begin: 0, end: pi * 2).animate(animationController);
-    widget.pageController.addListener(() {
-      if (widget.pageController.page! > widget.currentPosition) {
-        _rotateChild();
-      } else {
-        _rotateChild(forward: false);
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    widget.pageController.dispose();
-    animationController.dispose();
-    scalingAnimationController.dispose();
-    super.dispose();
-  }
-
-  //saves the next stop of the animation controller
-  double animationTarget = 0.0;
-
-  void _rotateChild({bool forward = true}) {
-    setState(() {
-      if (forward) {
-        animationTarget = animationTarget + 0.25;
-      } else {
-        animationTarget = animationTarget - 0.25;
-      }
-      imageOpacity = 0.5;
-      animationController.animateTo(animationTarget);
-      scalingAnimationController.forward(from: 0);
-    });
-  }
-
-  double bounce2(double t,
+class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage> {
+  double imageBounce(double t,
       {required double start, required double mid, required double end}) {
     return pow(1 - t, 2) * start +
         2 * (1 - t) * t * (mid * 2) +
@@ -88,17 +39,17 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
     final image = getImage(widget.currentPosition);
     return GestureDetector(
       onHorizontalDragUpdate: (direction) {
-        if (direction.delta.dx < 0) {
-          // Right Swipe
-          widget.pageController.nextPage(
-              duration: const Duration(milliseconds: 10),
-              curve: Curves.easeInOut);
-        } else if (direction.delta.dx > 0) {
-          //Left Swipe
-          widget.pageController.previousPage(
-              duration: const Duration(milliseconds: 10),
-              curve: Curves.easeInOut);
-        }
+        // if (direction.delta.dx < 0) {
+        //   // Right Swipe
+        //   _pageController.nextPage(
+        //       duration: const Duration(milliseconds: 10),
+        //       curve: Curves.easeInOut);
+        // } else if (direction.delta.dx > 0) {
+        //   //Left Swipe
+        //   _pageController.previousPage(
+        //       duration: const Duration(milliseconds: 10),
+        //       curve: Curves.easeInOut);
+        // }
       },
       child: Stack(
         children: [
@@ -107,100 +58,83 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
             left: 0,
             child: AnimatedOpacity(
               curve: Curves.fastOutSlowIn,
-              opacity: imageOpacity,
+              opacity: widget.imageOpacity,
               duration: const Duration(milliseconds: 300),
               child: Image.asset(image),
               onEnd: () {
                 setState(() {
-                  imageOpacity = 1.0;
+                  widget.imageOpacity = 1.0;
                 });
               },
             ),
           ),
           AnimatedBuilder(
-            animation: animationController,
+            animation: widget.animationController,
             builder: (context, child) {
               return Transform.rotate(
-                angle: animation.value,
+                angle: widget.animation.value,
                 child: AnimatedBuilder(
-                    animation: scalingAnimationController,
-                    builder: (context, ch) {
-                      final extent = bounce2(scalingAnimationController.value,
-                          start: 0, mid: 50, end: 0);
-                      return Stack(
-                        children: [
-                          Container(
-                            height: context.deviceHeight() / 2.5,
+                  animation: widget.scalingAnimationController,
+                  builder: (context, ch) {
+                    final extent = imageBounce(
+                        widget.scalingAnimationController.value,
+                        start: 0,
+                        mid: 50,
+                        end: 0);
+                    return Stack(
+                      children: [
+                        Container(
+                          height: context.deviceHeight() / 2.5,
+                        ),
+                        //using negative to ensure all images are rotating in the right form
+                        OnboardingBabyImageWidget(
+                          //top baby
+                          left: 0,
+                          right: 0,
+                          top: extent,
+                          backgroundColor: colorChange(
+                            2,
+                            context.themeData.colorScheme.secondary,
                           ),
-                          //using negative to ensure all images are rotating in the right form
-                          Positioned(
-                            //top baby
-                            left: 0,
-                            right: 0,
-                            top: extent,
-                            child: Transform.rotate(
-                              angle: -animation.value,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: colorChange(
-                                  2,
-                                  context.themeData.colorScheme.secondary,
-                                ),
-                                child:
-                                    Image.asset(OnboardingStrings.analytical),
-                              ),
-                            ),
+                          angle: -widget.animation.value,
+                          babyImage: OnboardingStrings.analytical,
+                        ),
+                        OnboardingBabyImageWidget(
+                          //right baby
+                          right: extent,
+                          top: 150,
+                          backgroundColor: colorChange(
+                            1,
+                            context.primaryColor,
                           ),
-                          Positioned(
-                            //right baby
-                            right: extent,
-                            top: 150,
-                            child: Transform.rotate(
-                              angle: -animation.value,
-                              child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: colorChange(
-                                    1,
-                                    context.primaryColor,
-                                  ),
-                                  child: Image.asset(OnboardingStrings.cry)),
-                            ),
-                          ),
-                          Positioned(
+                          angle: -widget.animation.value,
+                          babyImage: OnboardingStrings.cry,
+                        ),
+                        OnboardingBabyImageWidget(
                             //left baby
                             top: 150,
                             left: extent,
-                            child: Transform.rotate(
-                              angle: -animation.value,
-                              child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: colorChange(
-                                    3,
-                                    context.primaryColor,
-                                  ),
-                                  child: Image.asset(OnboardingStrings.happy)),
+                            backgroundColor: colorChange(
+                              3,
+                              context.primaryColor,
                             ),
-                          ),
-                          Positioned(
+                            angle: -widget.animation.value,
+                            babyImage: OnboardingStrings.happy),
+                        OnboardingBabyImageWidget(
                             //bottom baby
                             bottom: extent,
                             right: 0,
                             left: 0,
-                            child: Transform.rotate(
-                              angle: -animation.value,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: colorChange(
-                                  0,
-                                  context.themeData.colorScheme.secondary,
-                                ),
-                                child: Image.asset(OnboardingStrings.baby1),
-                              ),
+                            backgroundColor: colorChange(
+                              0,
+                              context.themeData.colorScheme.secondary,
                             ),
-                          ),
-                        ],
-                      );
-                    }),
+                            angle: -widget.animation.value,
+                            babyImage: OnboardingStrings.baby1),
+                      ],
+                    );
+                  },
+                ),
               );
             },
           ),
@@ -218,3 +152,11 @@ class _OnboardingAnimatedImageState extends State<OnboardingAnimatedImage>
     }
   }
 }
+
+// OnboardingAnimatedImage(
+// imageOpacity: imageOpacity,
+// scalingAnimationController: scalingAnimationController,
+// animationController: animationController,
+// animation: animation,
+// currentPosition: _currentPosition,
+// ),
