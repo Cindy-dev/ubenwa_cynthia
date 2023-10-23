@@ -17,10 +17,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     with TickerProviderStateMixin {
   late PageController _pageController;
   int _currentPosition = 0;
+  //allImageAnimationController
   late AnimationController animationController;
+  //handles the scaling(bounce in and out) of the baby images during rotation
   late AnimationController scalingAnimationController;
+  // handles the rotation positioning
   late Animation<double> animation;
-  late Tween<double> slideAnimation;
+  //handles the centered image opacity during rotation;
   late double imageOpacity;
 
   @override
@@ -30,11 +33,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       vsync: this,
       duration: const Duration(milliseconds: 700),
     );
-    //handles scaling of babies during rotation
     scalingAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
+    // assigning a begin and end value to the rotation animation
     animation =
         Tween<double>(begin: 0, end: pi * 2).animate(animationController);
     super.initState();
@@ -54,6 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   //saves the next stop of the animation controller
   double animationTarget = 0.0;
 
+  //this method handles the baby image rotation
   void _rotateChild({bool forward = true}) {
     setState(() {
       if (forward) {
@@ -67,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     });
   }
 
-  double bounce2(double t,
+  double bounceImage(double t,
       {required double start, required double mid, required double end}) {
     return pow(1 - t, 2) * start +
         2 * (1 - t) * t * (mid * 2) +
@@ -109,7 +113,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       child: AnimatedBuilder(
                         animation: scalingAnimationController,
                         builder: (context, ch) {
-                          final extent = bounce2(
+                          final extent = bounceImage(
                               scalingAnimationController.value,
                               start: 0,
                               mid: 50,
@@ -227,6 +231,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
+  // this method handles color change based on baby position
   Color colorChange(int babyPosition, Color babyColor) {
     int index = _currentPosition;
     if (index == babyPosition) {
@@ -236,6 +241,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     }
   }
 
+  //updates the page view position and calls rotate
   void _updatePosition(int position) {
     if (_pageController.page! > _currentPosition) {
       _rotateChild();

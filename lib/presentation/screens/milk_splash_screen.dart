@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ubenwa_cynthia/presentation/screens/home_screen.dart';
 import 'package:ubenwa_cynthia/presentation/utils/milk_splash_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 
@@ -15,6 +14,21 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
   Size size = Size.zero;
   late AnimationController _controller;
   late Animation<double> dropPosition;
+  double splashPosition = -10;
+
+  late final AnimationController _milkSplashController ;
+  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
+    begin: Offset(-1.0, 1.0), // Start at bottom left
+    end: Offset(1.0, -1.0),
+  ).animate(CurvedAnimation(
+    parent: _milkSplashController,
+    curve: Curves.easeIn,
+  ));
+  // late final Animation<double> _offsetAnimation =
+  //     Tween<double>(begin: splashPosition , end: 1.0).animate(CurvedAnimation(
+  //   parent: _milkSplashController,
+  //   curve: Curves.easeIn,
+  // ));
 
   @override
   void initState() {
@@ -40,12 +54,18 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
   }
 
   void _goToNextPage() {
-    Navigator.of(context).push(
-      FadeRouteBuilder(
-        Image.asset(MilkSplashStrings.splash),
-        page: const HomeScreen(),
-      ),
+   _milkSplashController = AnimationController(
+      duration: const Duration(seconds: 10),
+      vsync: this,
     );
+
+    // _milkSplashController.forward();
+    // Navigator.of(context).push(
+    //   FadeRouteBuilder(
+    //     Image.asset(MilkSplashStrings.splash),
+    //     page: const HomeScreen(),
+    //   ),
+    // );
   }
 
   @override
@@ -58,6 +78,7 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
 
   @override
   void dispose() {
+    // _milkSplashController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -77,10 +98,11 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
             ),
           ),
           Positioned(
-              top: dropPosition.value * size.height,
-              left: 0,
-              right: 0,
-              child: Image.asset(MilkSplashStrings.drop)),
+            top: dropPosition.value * size.height,
+            left: 0,
+            right: 0,
+            child: Image.asset(MilkSplashStrings.drop),
+          ),
           Positioned(
             left: 0,
             right: 0,
@@ -94,22 +116,13 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
             bottom: -context.deviceHeight() / 1.15,
             child: Image.asset(MilkSplashStrings.water),
           ),
+          // AnimatedPositioned(
+          //   duration: Duration(seconds: 2),
+          //   curve: Curves.easeOut,
+          //   child: Image.asset(MilkSplashStrings.splash),
+          // )
         ],
       ),
     );
   }
-}
-
-class FadeRouteBuilder<T> extends PageRouteBuilder<T> {
-  final Widget page;
-  final Widget child;
-
-  FadeRouteBuilder(this.child, {required this.page})
-      : super(
-          pageBuilder: (context, animation1, animation2) => page,
-          transitionsBuilder: (context, animation1, animation2, child) {
-            return FadeTransition(opacity: animation1, child: child);
-            //Image.asset(MilkSplashStrings.splash)
-          },
-        );
 }
