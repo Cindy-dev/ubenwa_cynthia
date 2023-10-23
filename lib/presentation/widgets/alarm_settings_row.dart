@@ -25,14 +25,18 @@ class AlarmSettingsRow extends StatelessWidget {
             Text(
               status,
               style: context.textTheme.titleLarge?.copyWith(
-                  fontSize: 14,
-                  color: context.themeData.cardColor.withOpacity(0.7)),
+                fontSize: 14,
+                color: context.themeData.cardColor.withOpacity(0.7),
+              ),
             ),
             const SizedBox(
               width: 10,
             ),
-            Icon(Icons.arrow_forward_ios,
-                size: 10, color: context.themeData.cardColor.withOpacity(0.7))
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 10,
+              color: context.themeData.cardColor.withOpacity(0.7),
+            )
           ],
         ),
       ],
