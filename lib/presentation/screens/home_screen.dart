@@ -58,97 +58,103 @@ class HomeScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                alignment: Alignment.center,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-                padding: const EdgeInsets.only(left: 18, right: 18, top: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: context.themeData.shadowColor.withOpacity(0.2),
+              Flexible(
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(vertical: 30) +
+                      const EdgeInsets.only(left: 25),
+                  padding: const EdgeInsets.only(left: 18, right: 18, top: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: context.themeData.shadowColor.withOpacity(0.2),
+                    ),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: context
-                              .themeData.colorScheme.secondary
-                              .withOpacity(0.5),
-                          child: Image.asset(HomeStrings.star),
-                        ),
-                        const SizedBox(
-                          width: 7,
-                        ),
-                        Text(
-                          "Daily Challenge",
-                          style: context.textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 25, bottom: 26),
-                      child: Image.asset(HomeStrings.challenge),
-                    ),
-                  ],
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: CircleAvatar(
+                              backgroundColor: context
+                                  .themeData.colorScheme.secondary
+                                  .withOpacity(0.5),
+                              child: Image.asset(HomeStrings.star),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Text(
+                            "Daily Challenge",
+                            style: context.textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: context.deviceWidth() / 30,
+                            bottom: context.deviceWidth() / 50),
+                        child: Image.asset(HomeStrings.challenge),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                alignment: Alignment.center,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-                padding: const EdgeInsets.only(left: 18, right: 18, top: 20),
-                decoration: BoxDecoration(
-                  color: context.primaryColor,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
+              const SizedBox(
+                width: 15,
+              ),
+              Flexible(
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(vertical: 30) +
+                      const EdgeInsets.only(right: 28),
+                  padding: const EdgeInsets.only(left: 18, right: 18, top: 20),
+                  decoration: BoxDecoration(
                     color: context.primaryColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: context.primaryColor,
+                    ),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    Image.asset(HomeStrings.predictCry),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      "Next Predicted Cry",
-                      style: context.textTheme.titleMedium?.copyWith(
-                          color: context.themeData.cardColor, fontSize: 11),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 9),
-                      child: Text(
+                  child: Column(
+                    children: [
+                      Image.asset(HomeStrings.predictCry),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Next Predicted Cry",
+                        style: context.textTheme.titleMedium?.copyWith(
+                            color: context.themeData.cardColor, fontSize: 11),
+                      ),
+                      Text(
                         "12:40 - 14:30",
                         style: context.textTheme.headlineLarge?.copyWith(
                             color: context.themeData.colorScheme.secondary,
-                            fontSize: 21),
+                            fontSize: context.deviceWidth() > 430 ? 21 : 17),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        alarmSheet(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          elevation: 4,
-                          padding: const EdgeInsets.symmetric(horizontal: 27),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5)),
-                          backgroundColor:
-                              context.themeData.cardColor.withOpacity(0.71)),
-                      child: Text(
-                        "Set Alarm",
-                        style: context.textTheme.titleMedium?.copyWith(
-                            color: context.primaryColor, fontSize: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          alarmSheet(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(99, 23),
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            backgroundColor:
+                                context.themeData.cardColor.withOpacity(0.71)),
+                        child: Text(
+                          "Set Alarm",
+                          style: context.textTheme.titleMedium?.copyWith(
+                              color: context.primaryColor, fontSize: 10),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 18,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ],

@@ -11,11 +11,12 @@ class OnboardingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: TextButton.styleFrom(
+        minimumSize: const Size(double.maxFinite, 20),
         backgroundColor: context.primaryColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
+          borderRadius: BorderRadius.circular(10),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 140),
+        padding: const EdgeInsets.symmetric(vertical: 15),
       ),
       onPressed: onPressed,
       child: Text(

@@ -80,12 +80,14 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final deviceH = context.deviceHeight();
+    final deviceW = context.deviceWidth();
     final image = getImage(_currentPosition);
     return Scaffold(
       body: Stack(
         children: [
           Positioned(
-            top: context.deviceHeight() / 7,
+            top: deviceH > 750 ? deviceH / 7 : deviceH / 16,
             left: 30,
             right: 30,
             child: Stack(
@@ -121,7 +123,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                           return Stack(
                             children: [
                               Container(
-                                height: context.deviceHeight() / 2.5,
+                                height:
+                                    deviceH > 750 ? deviceH / 2.4 : deviceH / 2,
                               ),
                               //using negative to ensure all images are rotating in the right form
                               OnboardingBabyImageWidget(

@@ -20,8 +20,11 @@ class OnboardingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceW = context.deviceWidth();
+    final deviceH = context.deviceHeight();
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 55),
+      padding: const EdgeInsets.symmetric(horizontal: 24) +
+          EdgeInsets.only(bottom: deviceH > 850 ? deviceH / 15 : 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -30,8 +33,9 @@ class OnboardingWidget extends StatelessWidget {
             flex: 2,
           ),
           Padding(
-            padding:
-                EdgeInsets.only(top: context.deviceWidth() / 1.7, bottom: 40),
+            padding: EdgeInsets.only(
+                top: deviceH > 850 ? deviceH / 3 : deviceH / 2.5,
+                bottom: deviceW / 12),
             child: OnboardingDotIndicator(currentPosition: currentPosition),
           ),
           Text(
@@ -51,7 +55,7 @@ class OnboardingWidget extends StatelessWidget {
           if (currentPosition != 3) const Spacer(),
           if (currentPosition == 3)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40),
+              padding: EdgeInsets.symmetric(vertical: deviceH > 850 ? 40 : 25),
               child: OnboardingButton(
                 title: "Get Started",
                 onPressed: () {
