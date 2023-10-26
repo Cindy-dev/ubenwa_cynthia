@@ -31,11 +31,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     imageOpacity = 1;
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 700),
+      duration: const Duration(seconds: 1),
     );
     scalingAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 800),
     );
     // assigning a begin and end value to the rotation animation
     animation =
