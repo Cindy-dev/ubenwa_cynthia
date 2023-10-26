@@ -1,16 +1,31 @@
-# ubenwa_cynthia
-
-A new Flutter project.
+A Mum Health App User Interface built with flutter.
 
 ## Getting Started
+Instructions to run:
 
-This project is a starting point for a Flutter application.
+1. This project was built with flutter, Please make sure you have that installed
+2. First do `flutter pub get` and then `flutter run` to run project
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Project Details:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The project is structured using clean architecture
+
+
+Packages used:
+
+- Calendar Timeline - calendar_timeline
+
+
+Screen flow/Project Structure:
+- A Splash Screen
+- An Onboarding Screen
+- A Loading Screen
+- A Home Overview Screen
+- An IOS like Alarm Sheet
+
+
+DOWNLOAD APK:
+<a href='https://drive.google.com/file/d/1K2gm-HG4v-rfsc-7dYi2R8445hw-uvbj/view?usp=sharing'> Click to download </a>
+
+
