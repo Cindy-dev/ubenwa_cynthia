@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ubenwa_cynthia/presentation/screens/home_screen.dart';
 import 'package:ubenwa_cynthia/presentation/utils/milk_splash_strings.dart';
 import 'package:ubenwa_cynthia/utils/app_extension.dart';
 
@@ -12,82 +13,97 @@ class MilkSplashScreen extends StatefulWidget {
 class _MilkSplashScreenState extends State<MilkSplashScreen>
     with TickerProviderStateMixin {
   Size size = Size.zero;
-  late AnimationController _controller;
-  late Animation<double> dropPosition;
-  double splashPosition = -10;
-
-  late final AnimationController _milkSplashController ;
-  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
-    begin: Offset(-1.0, 1.0), // Start at bottom left
-    end: Offset(1.0, -1.0),
-  ).animate(CurvedAnimation(
-    parent: _milkSplashController,
-    curve: Curves.easeIn,
-  ));
-  // late final Animation<double> _offsetAnimation =
-  //     Tween<double>(begin: splashPosition , end: 1.0).animate(CurvedAnimation(
-  //   parent: _milkSplashController,
-  //   curve: Curves.easeIn,
-  // ));
+  Color? backgroundColor;
+  late AnimationController _milkDropController;
+  Animation<double>? dropPosition;
+  late AnimationController _milkSplashController;
+  Animation<double>? _animationSplash;
 
   @override
   void initState() {
-    super.initState();
-    _controller = AnimationController(
+    _milkDropController = AnimationController(
       duration: const Duration(seconds: 3),
       vsync: this,
     );
-    dropPosition = Tween<double>(begin: -1, end: 0.6).animate(
+
+    //handles the splash effect
+    _milkSplashController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    Future.microtask(playAnimation);
+    super.initState();
+  }
+
+  playAnimation() {
+    const double bottleHeight = 100;
+    //handles the drop of the milk
+    dropPosition = Tween<double>(
+            begin: bottleHeight, end: context.deviceHeight() - bottleHeight)
+        .animate(
       CurvedAnimation(
-        parent: _controller,
+        parent: _milkDropController,
         curve: const Interval(0, 1.0, curve: Curves.easeIn),
       ),
     );
-    _controller.forward();
 
-    _controller.addListener(() {
+    //handles the animating points for the splash controller
+    _animationSplash = Tween<double>(
+      begin: 0,
+      end: -(context.deviceHeight() * 1.62),
+    ).animate(_milkSplashController);
+
+    //listens to changes in the milk drop controller
+    _milkDropController.addListener(() {
       setState(() {});
-      if (_controller.value == 1.0) {
-        _goToNextPage();
+      if (_milkDropController.value == 1.0) {
+        _milkSplashController.forward();
       }
     });
-  }
-
-  void _goToNextPage() {
-   _milkSplashController = AnimationController(
-      duration: const Duration(seconds: 10),
-      vsync: this,
-    );
-
-    // _milkSplashController.forward();
-    // Navigator.of(context).push(
-    //   FadeRouteBuilder(
-    //     Image.asset(MilkSplashStrings.splash),
-    //     page: const HomeScreen(),
-    //   ),
-    // );
-  }
-
-  @override
-  void didChangeDependencies() {
-    setState(() {
-      size = MediaQuery.of(context).size;
+    //listens to changes in the milk splash controller
+    _milkSplashController.addListener(() {
+      setState(() {});
+      if (_milkSplashController.isCompleted) {
+        backgroundColor = context.themeData.cardColor;
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (BuildContext context, Animation<double> animation,
+                Animation<double> secondaryAnimation) {
+              return HomeScreen();
+            },
+            transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+          ),
+        );
+      }
     });
-    super.didChangeDependencies();
+
+    //forward drop animation
+    _milkDropController.forward();
   }
 
   @override
   void dispose() {
-    // _milkSplashController.dispose();
-    _controller.dispose();
+    _milkSplashController.dispose();
+    _milkDropController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.primaryColor,
+      backgroundColor: backgroundColor ?? context.primaryColor,
       body: Stack(
+        alignment: AlignmentDirectional.topCenter,
         children: [
           Center(
             child: Text(
@@ -98,15 +114,14 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
             ),
           ),
           Positioned(
-            top: dropPosition.value * size.height,
-            left: 0,
-            right: 0,
-            child: Image.asset(MilkSplashStrings.drop),
+            top: 0,
+            child: Transform.translate(
+              offset: Offset(0, (dropPosition?.value ?? 0)),
+              child: Image.asset(MilkSplashStrings.drop),
+            ),
           ),
           Positioned(
-            left: 0,
-            right: 0,
-            top: -context.deviceHeight() / 2.3,
+            top: 0,
             child: Image.asset(MilkSplashStrings.bottle),
           ),
           Positioned(
@@ -116,11 +131,21 @@ class _MilkSplashScreenState extends State<MilkSplashScreen>
             bottom: -context.deviceHeight() / 1.15,
             child: Image.asset(MilkSplashStrings.water),
           ),
-          // AnimatedPositioned(
-          //   duration: Duration(seconds: 2),
-          //   curve: Curves.easeOut,
-          //   child: Image.asset(MilkSplashStrings.splash),
-          // )
+          Positioned(
+            top: context.deviceHeight(),
+            left: 0,
+            right: 0, // Right edge
+            child: Transform.translate(
+              offset: Offset(0, (_animationSplash?.value ?? 0)),
+              child: SizedBox(
+                width: context.deviceWidth() + 100,
+                child: Image.asset(
+                  MilkSplashStrings.splash,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
